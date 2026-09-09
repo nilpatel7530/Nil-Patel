@@ -52,6 +52,24 @@
       bonusProductVariantId = gridSectionEl.getAttribute('data-bonus-variant-id');
     }
 
+    // Dynamic fallback: If bonus product wasn't set in Customizer, fetch Soft Winter Jacket by handle
+    if (!bonusProductVariantId) {
+      fetch('/products/soft-winter-jacket.js')
+        .then(function (res) {
+          if (res.ok) return res.json();
+          return null;
+        })
+        .then(function (prod) {
+          if (prod && prod.variants && prod.variants.length > 0) {
+            bonusProductVariantId = prod.variants[0].id;
+          }
+        })
+        .catch(function () {
+          // Fallback demo variant ID if in preview sandbox
+          bonusProductVariantId = 88000999;
+        });
+    }
+
     // Attach Hotspot Click Handlers to all product cards
     const hotspotBtns = document.querySelectorAll('.ee-hotspot-btn');
     hotspotBtns.forEach(function (btn) {
