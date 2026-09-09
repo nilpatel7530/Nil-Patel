@@ -1,0 +1,255 @@
+{% comment %}
+  ==========================================================================
+  Ecomexperts Grid Section
+  Built from scratch for Ecomexperts Shopify Developer Assessment
+  Features: 6 Product Blocks with Customizer selection, interactive circular '+'
+  hotspot overlays, responsive 3x2 desktop grid, Quick-View Modal, Vanilla JS Ajax
+  cart addition, and automatic addition of 'Soft Winter Jacket' for Black + Medium variants.
+  ==========================================================================
+{% endcomment %}
+
+{{ 'ecomexperts-style.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  assign bonus_variant_id = ''
+  if section.settings.bonus_product != blank
+    assign bonus_variant_id = section.settings.bonus_product.selected_or_first_available_variant.id
+  endif
+%}
+
+<section
+  class="ecomexperts-wrapper ee-grid-section"
+  id="ee-grid-{{ section.id }}"
+  data-bonus-variant-id="{{ bonus_variant_id }}"
+>
+  <!-- Section Heading -->
+  <div class="ee-grid-header">
+    <h2 class="ee-grid-title ee-editable-highlight">
+      {{ section.settings.grid_heading }}
+    </h2>
+    {% if section.settings.grid_subheading != blank %}
+      <p class="ee-grid-subtitle ee-editable-highlight">
+        {{ section.settings.grid_subheading }}
+      </p>
+    {% endif %}
+  </div>
+
+  <!-- 3x2 Responsive Product Grid -->
+  <div class="ee-product-grid">
+    {% for block in section.blocks limit: 6 %}
+      {% assign product = block.settings.product %}
+      
+      <div class="ee-grid-card" {{ block.shopify_attributes }}>
+        <!-- Product Image / Mockup -->
+        {% if block.settings.custom_image != blank %}
+          <img class="ee-card-image" src="{{ block.settings.custom_image | image_url: width: 600 }}" alt="{{ product.title | default: 'Tisso Look' | escape }}" loading="lazy">
+        {% elsif product.featured_image != blank %}
+          <img class="ee-card-image" src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title | escape }}" loading="lazy">
+        {% else %}
+          {% comment %} Default High-Quality Placeholder Mockups for Figma Preview Match {% endcomment %}
+          {% case forloop.index %}
+            {% when 1 %}
+              <img class="ee-card-image" src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=600&q=80" alt="Orange Wide Leg Look" loading="lazy">
+            {% when 2 %}
+              <img class="ee-card-image" src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=600&q=80" alt="Tailored Jacket Look" loading="lazy">
+            {% when 3 %}
+              <img class="ee-card-image" src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=600&q=80" alt="Accordion Pleated Dress Look" loading="lazy">
+            {% when 4 %}
+              <img class="ee-card-image" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&q=80" alt="Green Trench Coat Look" loading="lazy">
+            {% when 5 %}
+              <img class="ee-card-image" src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=600&q=80" alt="Tennis Blue T-Shirt Look" loading="lazy">
+            {% when 6 %}
+              <img class="ee-card-image" src="https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=600&q=80" alt="Long Sleeve Tennis Top Look" loading="lazy">
+          {% endcase %}
+        {% endif %}
+
+        <!-- Hotspot Circular '+' Button -->
+        <button class="ee-hotspot-btn" aria-label="Quick View Product" type="button">
+          +
+        </button>
+
+        <!-- Product Sub-info Bar -->
+        <div class="ee-card-footer">
+          <p class="ee-card-title">
+            {{ block.settings.custom_title | default: product.title | default: 'Tisso Look Item' }}
+          </p>
+          <span class="ee-card-price">
+            {% if product != blank %}
+              {{ product.price | money }}
+            {% else %}
+              98,00 €
+            {% endif %}
+          </span>
+        </div>
+
+        <!-- Embedded JSON Script Data for Client-Side Modal Parsing -->
+        <script type="application/json" class="ee-product-data">
+          {% if product != blank %}
+            {
+              "id": {{ product.id }},
+              "title": {{ product.title | json }},
+              "price": {{ product.price }},
+              "description": {{ product.description | strip_html | truncate: 180 | json }},
+              "featured_image": {{ product.featured_image | image_url: width: 600 | json }},
+              "options": {{ product.options_with_values | json }},
+              "variants": [
+                {% for variant in product.variants %}
+                  {
+                    "id": {{ variant.id }},
+                    "title": {{ variant.title | json }},
+                    "price": {{ variant.price }},
+                    "available": {{ variant.available }},
+                    "option1": {{ variant.option1 | json }},
+                    "option2": {{ variant.option2 | json }},
+                    "option3": {{ variant.option3 | json }},
+                    "options": {{ variant.options | json }},
+                    "featured_image": {% if variant.featured_image %}{ "src": {{ variant.featured_image | image_url: width: 600 | json }} }{% else %}null{% endif %}
+                  }{% unless forloop.last %},{% endunless %}
+                {% endfor %}
+              ]
+            }
+          {% else %}
+            {% comment %} Demo Product JSON for Figma Matching Demo {% endcomment %}
+            {
+              "id": 99000{{ forloop.index }},
+              "title": {% case forloop.index %}{% when 1 %}"Orange Wide Leg"{% when 2 %}"Tailored Jacket"{% when 3 %}"Accordion Pleated Dress"{% when 4 %}"Green Trench Coat"{% when 5 %}"Tennis Blue T-Shirt"{% else %}"Long Sleeve Tennis Top"{% endcase %},
+              "price": 9800,
+              "description": "This one-piece garment is crafted from premium jersey featuring an allover micro Monogram motif in relief. Styled for high comfort and elegance.",
+              "featured_image": {% case forloop.index %}{% when 1 %}"https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=600&q=80"{% when 2 %}"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=600&q=80"{% when 3 %}"https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=600&q=80"{% when 4 %}"https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&q=80"{% when 5 %}"https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=600&q=80"{% else %}"https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=600&q=80"{% endcase %},
+              "options": [
+                { "name": "Color", "values": ["White", "Black", "Blue"] },
+                { "name": "Size", "values": ["Small", "Medium", "Large"] }
+              ],
+              "variants": [
+                {
+                  "id": 880001{{ forloop.index }},
+                  "title": "White / Small",
+                  "price": 9800,
+                  "available": true,
+                  "options": ["White", "Small"]
+                },
+                {
+                  "id": 880002{{ forloop.index }},
+                  "title": "Black / Medium",
+                  "price": 9800,
+                  "available": true,
+                  "options": ["Black", "Medium"]
+                },
+                {
+                  "id": 880003{{ forloop.index }},
+                  "title": "Blue / Large",
+                  "price": 9800,
+                  "available": true,
+                  "options": ["Blue", "Large"]
+                }
+              ]
+            }
+          {% endif %}
+        </script>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Quick-View Product Popup Modal Markup -->
+  <div class="ee-modal-backdrop" id="ee-modal-backdrop" role="dialog" aria-modal="true">
+    <div class="ee-modal-dialog">
+      <button class="ee-modal-close" aria-label="Close Modal" type="button">✕</button>
+      
+      <div class="ee-modal-media">
+        <img class="ee-modal-image" src="" alt="Product Preview">
+      </div>
+
+      <div class="ee-modal-info">
+        <h3 class="ee-modal-title">Product Title</h3>
+        <span class="ee-modal-price">0,00 €</span>
+        <p class="ee-modal-description">Product description will appear here.</p>
+
+        <!-- Dynamic Color Swatches -->
+        <div class="ee-option-group">
+          <span class="ee-option-label">Color</span>
+          <div class="ee-swatches"></div>
+        </div>
+
+        <!-- Dynamic Size Dropdown -->
+        <div class="ee-option-group">
+          <label class="ee-option-label" for="ee-size-select-input">Size</label>
+          <select id="ee-size-select-input" class="ee-size-select"></select>
+        </div>
+
+        <!-- Add to Cart CTA -->
+        <button class="ee-btn-add-cart" type="button">
+          <span>ADD TO CART -></span>
+        </button>
+
+        <div class="ee-cart-feedback"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="{{ 'ecomexperts-script.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Ecomexperts Grid",
+  "tag": "section",
+  "class": "ecomexperts-grid-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "grid_heading",
+      "label": "Section Heading",
+      "default": "Tisso vison in the wild"
+    },
+    {
+      "type": "text",
+      "id": "grid_subheading",
+      "label": "Section Subheading",
+      "default": "Click on any product circle to discover details & add to your cart."
+    },
+    {
+      "type": "product",
+      "id": "bonus_product",
+      "label": "Bonus Product (Soft Winter Jacket)",
+      "info": "Select the Soft Winter Jacket product. It will be automatically added to the cart when a Black + Medium variant is selected."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_block",
+      "name": "Product Card Block",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Select Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom Image Override"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom Title Override"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ecomexperts Grid",
+      "category": "Products",
+      "blocks": [
+        { "type": "product_block" },
+        { "type": "product_block" },
+        { "type": "product_block" },
+        { "type": "product_block" },
+        { "type": "product_block" },
+        { "type": "product_block" }
+      ]
+    }
+  ]
+}
+{% endschema %}
