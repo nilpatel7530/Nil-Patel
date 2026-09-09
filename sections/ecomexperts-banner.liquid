@@ -1,0 +1,163 @@
+{% comment %}
+  ==========================================================================
+  Ecomexperts Banner Section
+  Built from scratch for Ecomexperts Shopify Developer Assessment
+  Features: Editable announcement bar, brand logo, hero headline, description,
+  animated CTA button, hero illustration/image, and full-width ticker ribbon.
+  ==========================================================================
+{% endcomment %}
+
+{{ 'ecomexperts-style.css' | asset_url | stylesheet_tag }}
+
+<section class="ecomexperts-wrapper ee-banner-section" id="ee-banner-{{ section.id }}">
+  <!-- Top Announcement Bar -->
+  {% if section.settings.show_announcement %}
+    <div class="ee-announcement-bar">
+      <p class="ee-announcement-text ee-editable-highlight">{{ section.settings.announcement_text }}</p>
+      {% if section.settings.announcement_cta_text != blank %}
+        <a href="{{ section.settings.announcement_cta_url }}" class="ee-announcement-cta ee-editable-highlight">
+          {{ section.settings.announcement_cta_text }}
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <!-- Header Navigation / Brand Logo -->
+  <header class="ee-banner-header">
+    <a href="/" class="ee-brand-logo ee-editable-highlight">
+      {{ section.settings.brand_logo_text }}
+    </a>
+  </header>
+
+  <!-- Main Hero Container -->
+  <div class="ee-hero-container">
+    <div class="ee-hero-content">
+      <h1 class="ee-hero-heading ee-editable-highlight">
+        {{ section.settings.banner_heading }}
+      </h1>
+      <p class="ee-hero-subtitle ee-editable-highlight">
+        {{ section.settings.banner_subheading }}
+      </p>
+      {% if section.settings.banner_cta_text != blank %}
+        <a href="{{ section.settings.banner_cta_url }}" class="ee-btn-primary ee-editable-highlight">
+          <span>{{ section.settings.banner_cta_text }}</span>
+          <span class="ee-arrow">→</span>
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="ee-hero-graphic">
+      {% if section.settings.banner_image != blank %}
+        <img src="{{ section.settings.banner_image | image_url: width: 800 }}" alt="{{ section.settings.banner_heading | escape }}" loading="lazy">
+      {% else %}
+        <svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="300" rx="12" fill="#EAEAEA"/>
+          <path d="M150 120C150 108.954 158.954 100 170 100H230C241.046 100 250 108.954 250 120V180C250 191.046 241.046 200 230 200H170C158.954 200 150 191.046 150 180V120Z" stroke="#999999" stroke-width="4"/>
+          <circle cx="200" cy="150" r="25" stroke="#999999" stroke-width="4"/>
+        </svg>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Full-Width Ribbon Ticker Bar -->
+  <div class="ee-ribbon-bar">
+    <p class="ee-ribbon-text ee-editable-highlight">
+      {{ section.settings.ribbon_text }}
+    </p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Ecomexperts Banner",
+  "tag": "section",
+  "class": "ecomexperts-banner-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Announcement Bar Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show Announcement Bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement Text",
+      "default": "Find the ideal gift for your loved ones."
+    },
+    {
+      "type": "text",
+      "id": "announcement_cta_text",
+      "label": "Announcement Button Text",
+      "default": "CHOOSE GIFT ->"
+    },
+    {
+      "type": "url",
+      "id": "announcement_cta_url",
+      "label": "Announcement Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Brand & Header Settings"
+    },
+    {
+      "type": "text",
+      "id": "brand_logo_text",
+      "label": "Brand Logo Text",
+      "default": "TISSO VISON"
+    },
+    {
+      "type": "header",
+      "content": "Hero Banner Settings"
+    },
+    {
+      "type": "text",
+      "id": "banner_heading",
+      "label": "Banner Heading",
+      "default": "The Gift Guide"
+    },
+    {
+      "type": "textarea",
+      "id": "banner_subheading",
+      "label": "Banner Subheading",
+      "default": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season."
+    },
+    {
+      "type": "text",
+      "id": "banner_cta_text",
+      "label": "Primary Button Text",
+      "default": "SHOP NOW ->"
+    },
+    {
+      "type": "url",
+      "id": "banner_cta_url",
+      "label": "Primary Button Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Hero Image / Graphic"
+    },
+    {
+      "type": "header",
+      "content": "Ribbon Ticker Settings"
+    },
+    {
+      "type": "text",
+      "id": "ribbon_text",
+      "label": "Ribbon Ticker Text",
+      "default": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ecomexperts Banner",
+      "category": "Hero"
+    }
+  ]
+}
+{% endschema %}

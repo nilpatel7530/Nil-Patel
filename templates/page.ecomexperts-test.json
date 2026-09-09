@@ -1,0 +1,74 @@
+{
+  "sections": {
+    "banner": {
+      "type": "ecomexperts-banner",
+      "settings": {
+        "show_announcement": true,
+        "announcement_text": "Find the ideal gift for your loved ones.",
+        "announcement_cta_text": "CHOOSE GIFT ->",
+        "brand_logo_text": "TISSO VISON",
+        "banner_heading": "The Gift Guide",
+        "banner_subheading": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.",
+        "banner_cta_text": "SHOP NOW ->",
+        "ribbon_text": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
+      }
+    },
+    "grid": {
+      "type": "ecomexperts-grid",
+      "settings": {
+        "grid_heading": "Tisso vison in the wild",
+        "grid_subheading": "Click on any product circle to discover details & add to your cart."
+      },
+      "blocks": {
+        "card_1": {
+          "type": "product_block",
+          "settings": {
+            "custom_title": "Orange Wide Leg"
+          }
+        },
+        "card_2": {
+          "type": "product_block",
+          "settings": {
+            "custom_title": "Tailored Jacket"
+          }
+        },
+        "card_3": {
+          "type": "product_block",
+          "settings": {
+            "custom_title": "Accordion Pleated Dress"
+          }
+        },
+        "card_4": {
+          "type": "product_block",
+          "settings": {
+            "custom_title": "Green Trench Coat"
+          }
+        },
+        "card_5": {
+          "type": "product_block",
+          "settings": {
+            "custom_title": "Tennis Blue T-Shirt"
+          }
+        },
+        "card_6": {
+          "type": "product_block",
+          "settings": {
+            "custom_title": "Long Sleeve Tennis Top"
+          }
+        }
+      },
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3",
+        "card_4",
+        "card_5",
+        "card_6"
+      ]
+    }
+  },
+  "order": [
+    "banner",
+    "grid"
+  ]
+}
