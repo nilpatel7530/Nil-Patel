@@ -16,7 +16,8 @@
       <p class="ee-announcement-text ee-editable-highlight">{{ section.settings.announcement_text }}</p>
       {% if section.settings.announcement_cta_text != blank %}
         <a href="{{ section.settings.announcement_cta_url }}" class="ee-announcement-cta ee-editable-highlight">
-          {{ section.settings.announcement_cta_text }}
+          <span>{{ section.settings.announcement_cta_text }}</span>
+          <span class="ee-arrow">→</span>
         </a>
       {% endif %}
     </div>
